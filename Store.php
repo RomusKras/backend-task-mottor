@@ -52,7 +52,7 @@ class Store extends BaseClass
         }
     }
 
-    private function arrivalOfCustomers(): int
+    public function arrivalOfCustomers(): int
     {
         if ($this->totalHours > 3) {
             $numberOfCustomers = rand(self::MAX_CLIENTS_ON_CASHIER, self::NUMBER_OF_CASH_REGISTERS * self::MAX_CLIENTS_ON_CASHIER + 2);
