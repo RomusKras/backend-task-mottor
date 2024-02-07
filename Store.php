@@ -46,12 +46,6 @@ class Store extends BaseClass
             $this->cashiers[$freeIndex]->queueOfCustomers[] = $customer;
         } else { // Иначе добавляем в первую попавшшуюся кассу
             foreach ($this->cashiers as $index => $cashier) {
-//                if (count($cashier->queueOfCustomers) >= self::MAX_CLIENTS_ON_CASHIER) {
-//                    if ($index + 1 == count($this->cashiers)) {
-//                        $this->cashiers[] = new CashRegister(); // Создаем новую кассу
-//                    }
-//
-//                }
                 $this->cashiers[$index]->queueOfCustomers[] = $customer;
                 break;
             }
@@ -138,7 +132,6 @@ class Store extends BaseClass
                 if (!empty($cashier->queueOfCustomers)) {
                     $hasCustomers += count($cashier->queueOfCustomers);
                     $cashiersWithCustomers++;
-                    break;
                 }
             }
             if ($hasCustomers > 0) {
