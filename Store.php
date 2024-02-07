@@ -64,6 +64,8 @@ class Store extends BaseClass
 
     function processHour(): float|int
     {
+        echo "---".PHP_EOL;
+        echo "Час: ".($this->totalHours+1).PHP_EOL;
         // Моделируем приход новых покупателей
         $numberOfCustomers = $this->arrivalOfCustomers();
         // Добавление инфы о покупателях и распределение по кассам
@@ -78,13 +80,14 @@ class Store extends BaseClass
         for ($i = 0; $i < $numberOfCustomers; $i++) {
             $this->addCustomer(['products' => ['product1', 'product2']]); // Просто для примера 2 товара
         }
-        $this->echoDebugMessage("Касс ".count($this->cashiers));
+
         // Обработка покупателей
         $totalTimeProcessing = 0;
         /** @var CashRegister $cashier */
         foreach ($this->cashiers as $index => $cashier) {
             if (empty($cashier->queueOfCustomers)) {
                 $cashier->hoursSinceLastCustomer++; // Увеличиваем количество часов без покупателя
+                echo "На кассе №".($index+1)." нет покупателей ".PHP_EOL;
             } else {
                 $processingResult = $cashier->processCustomers();
                 $totalTimeProcessing += $processingResult['totalTime'];
@@ -101,18 +104,16 @@ class Store extends BaseClass
             if (empty($cashier->queueOfCustomers) && $cashier->hoursSinceLastCustomer > self::WAITING_TIME_FOR_NEW_CUSTOMERS) {
                 // Закрываем кассу, если нет покупателей и прошло достаточно времени
                 unset($this->cashiers[$index]);
-                echo "Кассир ушел с кассы №$index спустя ".self::WAITING_TIME_FOR_NEW_CUSTOMERS." ".
-                    $this->num2word(self::WAITING_TIME_FOR_NEW_CUSTOMERS, array('час', 'часа', 'часов'))." простоя".PHP_EOL;
+                $this->echoDebugMessage("Кассир ушел с кассы №$index спустя ".self::WAITING_TIME_FOR_NEW_CUSTOMERS." ".
+                    $this->num2word(self::WAITING_TIME_FOR_NEW_CUSTOMERS, array('час', 'часа', 'часов'))." простоя");
             }
         }
 
         // Выводим информацию о текущем состоянии
         $this->totalHours += 1;
-        echo "Час: $this->totalHours".PHP_EOL;
         $cntCashiers = count($this->cashiers);
-        echo "Количество работающих касс после часа: $cntCashiers" . "\n";
+        echo "Количество работающих касс после цикла: $cntCashiers" . "\n";
         echo "Общее время обработки на ".$this->num2word($cntCashiers, array('кассе', 'кассах', 'кассах')).": $totalTimeProcessing часов".PHP_EOL;
-        echo "\n";
 
         // Возвращаем оставшееся время обработки
         return $totalTimeProcessing;
@@ -125,7 +126,8 @@ class Store extends BaseClass
         for ($hour = 1; $hour <= $this->workingHours; $hour++) {
             $totalProcessingTime += $this->processHour();
         }
-        echo "Общее время обработки покупателей за день: $totalProcessingTime часов".PHP_EOL;
+        echo "===".PHP_EOL;
+        echo "Общее время обработки покупателей за рабочий день: $totalProcessingTime часов".PHP_EOL;
         if (!empty($this->cashiers)) {
             /** @var CashRegister $cashier */
             $hasCustomers = 0;
