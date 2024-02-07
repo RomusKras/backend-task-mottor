@@ -1,4 +1,5 @@
 <?php
+require "CashRegister.php";
 
 use PHPUnit\Framework\TestCase;
 
@@ -16,8 +17,7 @@ class CashRegisterTest extends TestCase
         $cashRegister = new CashRegister();
         $cashRegister->queueOfCustomers[] = ['products' => ['product1', 'product2']];
         $result = $cashRegister->processCustomers();
-        $this->assertGreaterThanOrEqual(0.3, $result['totalTime']); // Assuming default processing times
-        $this->assertLessThanOrEqual(1, $result['totalTime']);
+        $this->assertEquals(0.4, $result['totalTime']); // Assuming default processing times
         $this->assertEquals(0, $result['remainingCustomers']);
     }
 
@@ -27,8 +27,7 @@ class CashRegisterTest extends TestCase
         $cashRegister->queueOfCustomers[] = ['products' => ['product1', 'product2']];
         $cashRegister->queueOfCustomers[] = ['products' => ['product3', 'product4']];
         $result = $cashRegister->processCustomers();
-        $this->assertGreaterThanOrEqual(0.6, $result['totalTime']); // Assuming default processing times
-        $this->assertLessThanOrEqual(2, $result['totalTime']);
+        $this->assertEquals(0.8, $result['totalTime']); // Assuming default processing times
         $this->assertEquals(0, $result['remainingCustomers']);
     }
 

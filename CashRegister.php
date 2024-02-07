@@ -42,7 +42,7 @@ class CashRegister
 
     private function handleRemainingTime(float $remainingTime, float $emptyTime, array &$customer): float
     {
-        if ($emptyTime < $remainingTime) {
+        if ($emptyTime >= $remainingTime) {
             return round($remainingTime, 2);
         } else {
             $customer['remainingTime'] = round($remainingTime - $emptyTime, 2);

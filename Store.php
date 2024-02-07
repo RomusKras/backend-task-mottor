@@ -128,14 +128,18 @@ class Store extends BaseClass
             /** @var CashRegister $cashier */
             $hasCustomers = 0;
             $cashiersWithCustomers = 0;
+            $timeRemaining = 0.0;
             foreach ($this->cashiers as $cashier) {
                 if (!empty($cashier->queueOfCustomers)) {
                     $hasCustomers += count($cashier->queueOfCustomers);
                     $cashiersWithCustomers++;
+                    foreach ($cashier->queueOfCustomers as $customer) {
+                        $timeRemaining += $customer['remainingTime'] ?? 1;
+                    }
                 }
             }
             if ($hasCustomers > 0) {
-                echo "Осталось $hasCustomers покупателей на $cashiersWithCustomers кассах(е) на момент окончания рабочего дня".PHP_EOL;
+                echo "Осталось $hasCustomers покупателей на $cashiersWithCustomers кассах(е) на момент окончания рабочего дня, для них требовалось бы $timeRemaining часов".PHP_EOL;
             }
         }
     }
